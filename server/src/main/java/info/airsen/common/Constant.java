@@ -1,0 +1,12 @@
+package info.airsen.common;
+
+/**
+ * <p>常量</p>
+ *
+ * @author airsen
+ * @since 13-1-24 下午10:40
+ */
+public class Constant {
+
+
+}
