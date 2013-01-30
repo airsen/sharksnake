@@ -2,8 +2,24 @@ $(function () {
 
     var testUrl = '/test';
     var startGameUrl = '/start';
+
     template.openTag = "{{";
     template.closeTag = "}}";
+
+    // 画图属性
+    var canvas = $('#canvas')[0];
+    var canvasContext = canvas && canvas.getContext ? canvas.getContext('2d') : {};
+    var map = {};
+    map.size = 40;
+    map.speed = 1000;
+    var color = {
+        0: '#fff',
+        1: '#59EE4B',// 食物
+        10: 'blue',
+        20: 'black',
+        30: 'red',
+        40: 'pink'
+    };
 
     // 模版
     var playerTemplate = template.render('player');
@@ -22,6 +38,23 @@ $(function () {
         }, 2000);
     }
 
+    // 可以参加
+    function toggleJoinin($dom) {
+        var $parent = $dom.parent();
+        if ($dom.hasClass('btn-success')) {
+            $dom.html('已参与');
+            $parent.find('.btn-group button').attr('disabled', 'disabled');
+            $parent.find('.address:input[type="text"]').attr('disabled', 'disabled');
+            $parent.find('.type[type="hidden"]').attr('name', 'type').val($parent.find('.active').val());
+            $parent.find('.address:input[type="hidden"]').attr('name', 'address').val($parent.find('.address:input[type="text"]').val());
+        } else {
+            $dom.html('未参与');
+            $parent.find('.btn-group button').removeAttr('disabled');
+            $parent.find('.address:input[type="text"]').removeAttr('disabled');
+            $parent.find('.type[type="text"]').removeAttr('name');
+            $parent.find('.address:input[type="hidden"]').removeAttr('name');
+        }
+    }
 
     // 增加一位玩家
     $('#add-player').click(function () {
@@ -43,28 +76,44 @@ $(function () {
         $('#config-board').modal('hide');
     });
 
+    // 调整速度
+    $('#speed').change(function () {
+        map.speed = $(this).val(); //TODO检查是否是数字
+    })
+
+    // 参与
+    $('.joinin').live('click', function () {
+        if ($(this).parent().find('.test').hasClass('btn-success')) {
+            $(this).toggleClass('btn-success');
+            toggleJoinin($(this));
+        } else {
+            notice('warnning', '请先测试通过');
+        }
+    });
+
     // 测试连接
     $('.test').live('click', function () {
         var $dom = $(this);
         var type = $dom.parent().find('.active').val();
-        var address = $dom.parent().find('.address').val();
-        $dom.attr('class', 'btn');
-        $dom.val('测试');
+        var address = $dom.parent().find('.address[type="text"]').val();
+        $dom.attr('class', 'btn test');
         if (type == undefined || address == undefined || type == "" || address == "") {
             notice('error', '格式不对');
             $dom.addClass('btn-warning');
+            toggleJoinin($dom.parent().find('.join'));
         } else {
             $.get(testUrl, {
                 type: type,
                 address: address
             }, function (e) {
                 if (e.success == true) {
-                    notice('error', e.message);
+                    notice('success', e.message);
                     $dom.addClass('btn-success');
                 }
                 else {
-                    notice('success', e.message);
+                    notice('error', e.message);
                     $dom.addClass('btn-danger');
+                    toggleJoinin($dom.parent().find('.join'));
                 }
             }, 'json')
         }
@@ -72,24 +121,44 @@ $(function () {
 
     // 开始游戏
     $('#start-game').click(function () {
-        $('.test btn-success')
-        $.post(startGameUrl, $('#config').serialize(), function (data) {
-            alert(data);
+        $.post(startGameUrl, $('#config').serialize(), function (game) {
+
+            // 去掉已有地图
+            canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+            canvas.width = game.width * map.size;
+            canvas.height = game.height * map.size;
+//            $(canvas).css({
+//                width: '80%',
+//                height: '60%'
+//            })
+
+            // 初始化地图哦耶
+            console.log('游戏的宽度高度:' + game.width + '-' + game.height);
+            console.log('现实场地的宽度宽度:' + canvas.width + '-' + canvas.height);
+            console.log('横纵坐标单位:' + map.size);
+
+            //开始播放
+            var i = 0;
+            setInterval(function () { // 每帧
+                if (i < game.round) {
+                    for (var j in game.frames[i]) { // 每增量变化单元格
+                        var unit = game.frames[i][j];
+                        var value = unit.value;
+                        if (value >= 10)
+                            value = parseInt(value / 10) * 10;
+                        canvasContext.fillStyle = color[value];
+                        canvasContext.fillRect(unit.x * map.size, unit.y * map.size, map.size, map.size);
+                    }
+                }
+                i++;
+            }, map.speed);
+
         }, 'json');
     });
 
-    // canvas画画
-    (function () {
-        var canvas = $('#canvas')[0];
-        var context = canvas && canvas.getContext ? canvas.getContext('2d') : {};
-        var width = canvas.width, height = canvas.height, size = 10;
 
-        context.fillStyle = '#eee';
-        context.fillRect(0, 0, width, height);
-    })();
-
-    // 初始化
+// 初始化
     $('.container form').append(playerTemplate);
 
-
-});
+})
+;

@@ -32,15 +32,6 @@ public class DriverContext {
 			this.driverClazz = driverClazz;
 		}
 
-		public static DriverType getByAlias(String alias) {
-			for (DriverType type : DriverType.values()) {
-				if (type.getAlias().equals(alias)) {
-					return type;
-				}
-			}
-			return null;
-		}
-
 		public static Driver getInstanceByAlias(String alias) {
 			for (DriverType type : DriverType.values()) {
 				if (type.getAlias().equals(alias)) {

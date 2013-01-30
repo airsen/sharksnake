@@ -17,6 +17,9 @@ public class GameModel {
 
 	private int winner;
 
+	private int width;
+	private int height;
+
 	private boolean more; // 还需要继续请求时为true
 	private String key; // 请求文件的key
 	private int offset; // 偏移量

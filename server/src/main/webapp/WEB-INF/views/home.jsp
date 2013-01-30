@@ -39,8 +39,6 @@
 
 <div class="container">
     <form class="well form-horizontal" method="post" id="config">
-        <input type="hidden" id="count" name="count" value="0">
-
         <div class="btn-group pull-right">
             <div class="btn" id="config-game" data-toggle="modal" data-target="#config-board">配置游戏</div>
             <div class="btn" id="start-game">开始游戏</div>
@@ -49,7 +47,7 @@
             <div class="btn" id="add-player">添加玩家</div>
             <div class="btn" id="delete-player">删除玩家</div>
         </div>
-        <div id="config-board" class="modal .fade" data-show="false" data-backdrop="false" style="display: none">
+        <div id="config-board" class="modal .fade" data-show="false" data-backdrop="true" style="display: none">
             <div class="modal-header">
                 <h3>游戏配置</h3>
             </div>
@@ -66,8 +64,16 @@
                     <label class="control-label" for="width">长宽</label>
 
                     <div class="controls">
-                        <input type="text" class="input-medium" id="width" name="width" placeholder="宽度，默认是20">
-                        <input type="text" class="input-medium" id="height" name="height" placeholder="高度，默认是20">
+                        <input type="text" class="input-medium" id="width" name="width" placeholder="宽度，默认是30">
+                        <input type="text" class="input-medium" id="height" name="height" placeholder="高度，默认是15">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="totalRound">播放速度</label>
+
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" id="speed"
+                               placeholder="播放游戏的速度，单位毫秒，默认是1000">
                     </div>
                 </div>
             </div>
@@ -76,9 +82,7 @@
             </div>
         </div>
     </form>
-    <div>
-        <canvas id="canvas">不支持Canvas，请用以下浏览器：IE9+ FF3.6+ Chrome10+</canvas>
-    </div>
+    <canvas id="canvas">不支持Canvas，请用以下浏览器：IE9+ FF3.6+ Chrome10+</canvas>
 </div>
 
 <script type="text/javascript" src="/resources/js/jquery.min.js"></script>
@@ -89,12 +93,16 @@
 <script type="text/javascript" src="/resources/js/index.js"></script>
 <script type="text/html" id="player">
     <div class="clearfix">
+        <input type="hidden" class="type">
+        <input type="hidden" class="address">
+
         <div class="btn-group pull-left" data-toggle="buttons-radio">
-            <button type="button" class="btn active" name="type" value="http">HTTP</button>
-            <button type="button" class="btn" name="type" value="udp">UDP</button>
+            <button type="button" class="btn active" value="http">HTTP</button>
+            <button type="button" class="btn" value="udp">UDP</button>
         </div>
-        <input type="text" name="address" class="span4 input-large address" placeholder="输入你的访问地址和端口">
-        <button class="btn test" type="button" name="test">测试</button>
+        <input type="text" class="span4 input-large address" placeholder="输入你的访问地址和端口">
+        <button class="btn test" type="button">测试</button>
+        <button type="button" class="btn joinin">未参与</button>
     </div>
 </script>
 <script type="text/html" id="notice">

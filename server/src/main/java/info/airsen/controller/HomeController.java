@@ -39,9 +39,11 @@ public class HomeController {
 	GameModel start() {
 		List<Player> players = createPlayers();
 		List<DriverContext> clientList = createPlayContexts(players);
-		GameContext gameContext = createGameContext();
+		GameContext gameContext = createGameContext(players.size());
 
 		GameModel gameModel = new GameModel(gameContext.getKey());
+		gameModel.setWidth(gameContext.getWidth());
+		gameModel.setHeight(gameContext.getHeight());
 
 		int[] playerResults = new int[players.size() + 1];
 		do {
@@ -64,7 +66,7 @@ public class HomeController {
 	public
 	@ResponseBody
 	WebRequestModel test(HttpServletRequest request) {
-		LOGGER.info(request.getRemoteAddr() + "提交测试");
+		LOGGER.info(request.getRemoteAddr() + " 提交测试");
 		String address = ParseUtil.getParameter("address", "");
 		String type = ParseUtil.getParameter("type", "");
 		WebRequestModel webRequestModel = new WebRequestModel();
@@ -77,8 +79,8 @@ public class HomeController {
 			} else
 				webRequestModel.set(false, "连通失败");
 		} catch (Exception e) {
-			LOGGER.warn("内部错误", e);
-			webRequestModel.set(false, "内部错误");
+			LOGGER.warn("内部错误:" + e.getMessage());
+			webRequestModel.set(false, "连接超时");
 		}
 		return webRequestModel;
 	}
@@ -89,11 +91,11 @@ public class HomeController {
 	 *
 	 * @return 游戏
 	 */
-	private GameContext createGameContext() {
+	private GameContext createGameContext(int playerCount) {
 		GameContext context = new GameContext();
-		context.setCount(ParseUtil.getParameter("count", 1));
-		context.setHeight(ParseUtil.getParameter("height", 20));
-		context.setWidth(ParseUtil.getParameter("width", 20));
+		context.setCount(ParseUtil.getParameter("count", playerCount));
+		context.setHeight(ParseUtil.getParameter("height", 15));
+		context.setWidth(ParseUtil.getParameter("width", 30));
 		context.setTotalRound(ParseUtil.getParameter("totalRound", 100));
 		context.init();
 		return context;

@@ -1,5 +1,6 @@
 package info.airsen.driver;
 
+import info.airsen.common.RandomUtil;
 import info.airsen.game.GameContext;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -24,20 +25,31 @@ public class HttpDriver extends Driver {
 		try {
 			URL url = new URL(address + "/test");
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setConnectTimeout(4000);
+			connection.setConnectTimeout(1000);
 			connection.connect();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"));//设置编码,否则中文乱码
 			String result = reader.readLine();
 			return StringUtils.isNotBlank(result) && result.equals("ok");
 		} catch (Exception e) {
-			LOGGER.warn("内部出错", e);
+			LOGGER.warn("连接超时:" + e.getMessage());
 		}
 		return false;
-
 	}
 
 	@Override
 	public int next(GameContext gameContext) {
-		return 1;
+		int direction = RandomUtil.getRandomInt(4) + 1;
+		try {
+			URL url = new URL(address + "/next");
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setConnectTimeout(1000);
+			connection.connect();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"));//设置编码,否则中文乱码
+			String result = reader.readLine();
+			direction = Integer.valueOf(result);
+		} catch (Exception e) {
+			LOGGER.warn("连接超时:" + e.getMessage());
+		}
+		return direction;
 	}
 }

@@ -14,11 +14,18 @@ div.clearfix {
     min-width: 100px;
 }
 
-#canvas {
-    width: 100%;
-    height: 90%;
-}
-
 div.btn-group {
     margin-right: 5px;
+}
+
+div .joinin {
+    margin-right: 5px;
+    width: 65px;
+}
+
+#canvas {
+    margin: 0 auto;
+    width: 100%;
+    height: 90%;
+    border: #000000 solid medium;
 }
