@@ -47,10 +47,6 @@ public class DriverContext {
 
 	}
 
-	public DriverContext(String driverType) {
-		this.driver = DriverType.getInstanceByAlias(driverType);
-	}
-
 	public DriverContext(String driverType, String address) {
 		this.driver = DriverType.getInstanceByAlias(driverType);
 		this.driver.setAddress(address);

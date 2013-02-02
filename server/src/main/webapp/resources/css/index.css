@@ -25,8 +25,9 @@ div .joinin {
 
 div .color {
     margin-right: 5px;
+    margin-top: 2px;
     width: 25px;
-    height: 27px;
+    height: 25px;
 }
 
 #canvas {

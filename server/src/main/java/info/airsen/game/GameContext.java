@@ -24,10 +24,10 @@ public class GameContext {
 	private static final Logger LOGGER = Logger.getLogger(GameContext.class);
 
 	// 方向常量
-	public static final int DIR_UP = 1;
-	public static final int DIR_RIGHT = 2;
-	public static final int DIR_DOWN = 3;
-	public static final int DIR_LEFT = 4;
+	public static final int DIR_UP = 3;
+	public static final int DIR_RIGHT = 4;
+	public static final int DIR_DOWN = 1;
+	public static final int DIR_LEFT = 2;
 
 	// 物体常量
 	public static final int FOOD = 1;
@@ -83,7 +83,7 @@ public class GameContext {
 	 */
 	public void setFood(Coordinate newFood) {
 		clearValue(food);
-		setValue(newFood, 1);
+		setValue(newFood, FOOD);
 	}
 
 	public List<Coordinate> popIncreMap() {
@@ -133,6 +133,19 @@ public class GameContext {
 		}
 	}
 
+	public void killSnake(int which) {
+		Coordinate temp1 = snakeHeads[which];
+		Coordinate temp2;
+		while (temp1 != null) {
+			temp2 = getNext(temp1);
+			clearValue(temp1);
+			temp1 = temp2;
+		}
+		snakeHeads[which] = null;
+		snakeLengths[which] = 0;
+		--alive;
+	}
+
 	/**
 	 * <p>包装了判断逻辑的nextRound</p>
 	 *
@@ -160,6 +173,8 @@ public class GameContext {
 		// 2.2，要判断是否重叠，或者碰到障碍，或者吃到东西
 		for (int i = 1; i <= count; i++) {
 			Coordinate currSnake = fetureSnakeHeadList.get(i);
+			if (snakeHeads[i] == null)
+				continue;
 			if (fetureSnakeHeadList.get(i) == null)
 				deathQueue.add(i);
 			else if (isDuplicate(i, fetureSnakeHeadList)) // 跟其他蛇头相撞了，拜了个拜
@@ -174,19 +189,9 @@ public class GameContext {
 		}
 		// 3，开始处理后事
 		// 3.1，擦除死亡的玩家
-		Coordinate temp1;
-		Coordinate temp2;
-		for (Integer whichSnake : deathQueue) {
-			temp1 = snakeHeads[whichSnake];
-			while (temp1 != null) {
-				temp2 = getNext(temp1);
-				clearValue(temp1);
-				temp1 = temp2;
-			}
-			snakeHeads[whichSnake] = null;
-			snakeLengths[whichSnake] = 0;
-			--alive;
-		}
+		for (Integer whichSnake : deathQueue)
+			killSnake(whichSnake);
+
 		// 3.2，给吃到食物的蛇们发福利
 		for (Integer whichSnake : longerQueue) {
 			moveHead(whichSnake, fetureSnakeHeadList.get(whichSnake), directions[whichSnake]);
@@ -218,7 +223,8 @@ public class GameContext {
 
 	public void moveTail(int whichSnake) {
 		Coordinate tail = getTail(whichSnake);
-		clearValue(tail);
+		if (tail != null) // 如果拿不到tail表示这条蛇可能已经死了，死了，了…
+			clearValue(tail);
 	}
 
 	/**
@@ -230,6 +236,8 @@ public class GameContext {
 	 * @return 返回蛇头的位置，如果撞上障碍物了返回null
 	 */
 	public Coordinate getNextHead(int whichSnake, int direction) {
+		if (snakeHeads[whichSnake] == null)
+			return null;
 		int x = snakeHeads[whichSnake].getX();
 		int y = snakeHeads[whichSnake].getY();
 		int _x = 0;
@@ -301,6 +309,8 @@ public class GameContext {
 	 */
 	private Coordinate getTail(int whichSnake) {
 		Coordinate head = snakeHeads[whichSnake];
+		if (head == null) // 已经逝去…致敬
+			return null;
 		Coordinate current, next = head;
 		do {
 			current = next;

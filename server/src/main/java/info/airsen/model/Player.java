@@ -17,7 +17,6 @@ public class Player {
 
 	public Player(String type, String address) {
 		this.type = type;
-		this.address = address;
+		setAddress(address);
 	}
-
 }

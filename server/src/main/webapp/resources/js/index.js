@@ -15,17 +15,16 @@ $(function () {
     var map = {};
     map.size = 40;
     map.speed = 1000;
+    map.playerMaxCount = 5;
     var color = {
         0: '#fff',
         1: '#59EE4B',// 食物
-        10: 'blue',
-        20: 'black',
-        30: 'red',
-        40: 'pink'
+        10: '#89D7E6',
+        20: '#DCEB58',
+        30: 'pink',
+        40: '#F22D0A',
+        50: 'grey'
     };
-
-    // 模版
-    var playerTemplate = template.render('player');
 
     // 模版
     function getPlayerTemplate(index) {
@@ -55,14 +54,18 @@ $(function () {
             $dom.html('已参与');
             $parent.find('.btn-group button').attr('disabled', 'disabled');
             $parent.find('.address:input[type="text"]').attr('disabled', 'disabled');
-            $parent.find('.type[type="hidden"]').attr('name', 'type').val($parent.find('.active').val());
-            $parent.find('.address:input[type="hidden"]').attr('name', 'address').val($parent.find('.address:input[type="text"]').val());
+            $parent.find('.type[type="hidden"]').val($parent.find('.active').val());
+            $parent.find('.address:input[type="hidden"]').val($parent.find('.address:input[type="text"]').val());
+//            $parent.find('.type[type="hidden"]').attr('name', 'type').val($parent.find('.active').val());
+//            $parent.find('.address:input[type="hidden"]').attr('name', 'address').val($parent.find('.address:input[type="text"]').val());
         } else {
             $dom.html('未参与');
             $parent.find('.btn-group button').removeAttr('disabled');
             $parent.find('.address:input[type="text"]').removeAttr('disabled');
-            $parent.find('.type[type="text"]').removeAttr('name');
-            $parent.find('.address:input[type="hidden"]').removeAttr('name');
+            $parent.find('.type[type="hidden"]').val('');
+            $parent.find('.address:input[type="hidden"]').val('');
+//            $parent.find('.type[type="hidden"]').removeAttr('name');
+//            $parent.find('.address:input[type="hidden"]').removeAttr('name');
         }
     }
 
@@ -131,6 +134,15 @@ $(function () {
 
     // 开始游戏
     $('#start-game').click(function () {
+        if ($(this).hasClass('disabled')) {
+            notice('warnning', '表急，还在计算中');
+            return;
+        } else if ($('.joinin.btn-success').length == 0) {
+            return notice('warnning', '要有人参加才行啊…');
+            return;
+        }
+        notice('success', '游戏计算中…');
+        $(this).button('loading');
         $.post(startGameUrl, $('#config').serialize(), function (game) {
 
             // 去掉已有地图
@@ -163,7 +175,7 @@ $(function () {
                 }
                 i++;
             }, map.speed);
-
+            $('#start-game').button('reset');
         }, 'json');
     });
 

@@ -29,7 +29,7 @@ public class HomeController {
 	 */
 	@RequestMapping(value = "/")
 	public ModelAndView home(HttpServletRequest request) throws IOException {
-		LOGGER.info(request.getRemoteAddr() + "登录首页");
+		LOGGER.info(request.getRemoteAddr() + " - 登录首页");
 		return new ModelAndView("home");
 	}
 
@@ -39,7 +39,7 @@ public class HomeController {
 	GameModel start() {
 		List<Player> players = createPlayers();
 		List<DriverContext> clientList = createPlayContexts(players);
-		GameContext gameContext = createGameContext(players.size());
+		GameContext gameContext = createGameContext(players);
 
 		GameModel gameModel = new GameModel(gameContext.getKey());
 		gameModel.setWidth(gameContext.getWidth());
@@ -49,8 +49,11 @@ public class HomeController {
 		do {
 			List<Coordinate> increMap = gameContext.popIncreMap();
 			gameModel.add(increMap);
-			for (int i = 0; i < clientList.size(); i++) {
-				playerResults[i + 1] = clientList.get(i).next(gameContext);
+			for (int i = 0; i < gameContext.getCount(); i++) {
+				if (gameContext.getSnakeHeads()[i + 1] != null) { // 已经逝去
+					playerResults[i + 1] = clientList.get(i + 1).next(gameContext);
+				}
+//				playerResults[i + 1] = clientList.get(i).next(gameContext);
 			}
 		} while (gameContext.nextRound(playerResults));
 		gameContext.getWinner(); // TODO
@@ -91,13 +94,19 @@ public class HomeController {
 	 *
 	 * @return 游戏
 	 */
-	private GameContext createGameContext(int playerCount) {
+	private GameContext createGameContext(List<Player> players) {
 		GameContext context = new GameContext();
-		context.setCount(ParseUtil.getParameter("count", playerCount));
+		context.setCount(ParseUtil.getParameter("count", players.size()));
 		context.setHeight(ParseUtil.getParameter("height", 15));
 		context.setWidth(ParseUtil.getParameter("width", 30));
 		context.setTotalRound(ParseUtil.getParameter("totalRound", 100));
 		context.init();
+		for (int i = 0; i < players.size(); i++) {
+			if (players.get(i) == null)
+				context.killSnake(i + 1);
+		}
+		if (context.getCount() > 1 && context.getAlive() == 1)
+			context.setAlive(2);
 		return context;
 	}
 
@@ -109,16 +118,22 @@ public class HomeController {
 		List<Player> players = new ArrayList<>();
 		for (int i = 0; i < playerAddresses.length; i++) {
 			if (StringUtils.isBlank(playerTypes[i]) || StringUtils.isBlank(playerAddresses[i]))
-				continue;
-			players.add(new Player(playerTypes[i], playerAddresses[i]));
+				players.add(null);
+			else
+				players.add(new Player(playerTypes[i], playerAddresses[i]));
 		}
 		return players;
 	}
 
 	private List<DriverContext> createPlayContexts(List<Player> players) {
 		List<DriverContext> driverContexts = new ArrayList<DriverContext>();
-		for (Player play : players)
-			driverContexts.add(new DriverContext(play.getType(), play.getAddress()));
+		driverContexts.add(null); // 一楼给度娘
+		for (Player player : players) {
+			if (player == null)
+				driverContexts.add(null);
+			else
+				driverContexts.add(new DriverContext(player.getType(), player.getAddress()));
+		}
 		return driverContexts;
 	}
 

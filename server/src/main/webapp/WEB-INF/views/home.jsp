@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>欢迎来玩贪食蛇哦耶</title>
+    <title>多人贪食蛇哦耶</title>
     <meta name="description" content="天下第一武大会">
     <meta name="author" content="王俊森(jason61719@gmail.com)">
 
@@ -41,7 +41,7 @@
     <form class="well form-horizontal" method="post" id="config">
         <div class="btn-group pull-right">
             <div class="btn" id="config-game" data-toggle="modal" data-target="#config-board">配置游戏</div>
-            <div class="btn" id="start-game">开始游戏</div>
+            <div class="btn" id="start-game" data-loading-text="计算中…">开始游戏</div>
         </div>
         <div class="btn-group pull-right">
             <div class="btn" id="add-player">添加玩家</div>
@@ -94,8 +94,8 @@
 <script type="text/html" id="player">
     <div class="clearfix">
         <div class="pull-left color" style="background-color:{{=color }}"></div>
-        <input type="hidden" class="type">
-        <input type="hidden" class="address">
+        <input type="hidden" name="type" class="type">
+        <input type="hidden" name="address" class="address">
 
         <div class="btn-group pull-left" data-toggle="buttons-radio">
             <button type="button" class="btn active" value="http">HTTP</button>
