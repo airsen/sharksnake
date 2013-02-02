@@ -71,6 +71,10 @@ $(function () {
 
     // 增加一位玩家
     $('#add-player').click(function () {
+        if ($('.container form .clearfix').length >= map.playerMaxCount) {
+            notice('warnning', '当前最多支持5位');
+            return;
+        }
         $('.container form').append(getPlayerTemplate($('.container form .clearfix').length + 1));
     });
 

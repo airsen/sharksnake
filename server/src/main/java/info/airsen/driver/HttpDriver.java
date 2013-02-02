@@ -1,5 +1,6 @@
 package info.airsen.driver;
 
+import info.airsen.common.Constant;
 import info.airsen.game.GameContext;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -24,7 +25,7 @@ public class HttpDriver extends Driver {
 	private int lastDirection;
 
 	public HttpDriver() {
-		this.lastDirection = 1;
+		this.lastDirection = GameContext.DIR_UP;
 	}
 
 	@Override
@@ -55,6 +56,19 @@ public class HttpDriver extends Driver {
 
 	@Override
 	public int next(GameContext gameContext) {
+
+		try {
+			URL url = new URL(address + "/next?gameContext=" + Constant.GSON.toJson(gameContext));
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setConnectTimeout(1000);
+			connection.connect();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"));//设置编码,否则中文乱码
+			int result = Integer.valueOf(reader.readLine());
+			if (result > 0 && result < 5)
+				lastDirection = result;
+		} catch (Exception e) {
+			LOGGER.warn("连接超时:" + e.getMessage());
+		}
 		return lastDirection;
 	}
 }

@@ -69,7 +69,7 @@ public class HomeController {
 	public
 	@ResponseBody
 	WebRequestModel test(HttpServletRequest request) {
-		LOGGER.info(request.getRemoteAddr() + " 提交测试");
+		LOGGER.info(request.getRemoteAddr() + " - 提交测试");
 		String address = ParseUtil.getParameter("address", "");
 		String type = ParseUtil.getParameter("type", "");
 		WebRequestModel webRequestModel = new WebRequestModel();
