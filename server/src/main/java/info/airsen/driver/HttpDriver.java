@@ -39,17 +39,17 @@ public class HttpDriver extends Driver {
 	@Override
 	public int next(GameContext gameContext) {
 		int direction = RandomUtil.getRandomInt(4) + 1;
-		try {
-			URL url = new URL(address + "/next");
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setConnectTimeout(1000);
-			connection.connect();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"));//设置编码,否则中文乱码
-			String result = reader.readLine();
-			direction = Integer.valueOf(result);
-		} catch (Exception e) {
-			LOGGER.warn("连接超时:" + e.getMessage());
-		}
+//		try {
+//			URL url = new URL(address + "/next");
+//			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//			connection.setConnectTimeout(1000);
+//			connection.connect();
+//			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"));//设置编码,否则中文乱码
+//			String result = reader.readLine();
+//			direction = Integer.valueOf(result);
+//		} catch (Exception e) {
+//			LOGGER.warn("连接超时:" + e.getMessage());
+//		}
 		return direction;
 	}
 }

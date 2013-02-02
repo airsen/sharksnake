@@ -6,6 +6,9 @@ $(function () {
     template.openTag = "{{";
     template.closeTag = "}}";
 
+    // 动画的句柄
+    var handler;
+
     // 画图属性
     var canvas = $('#canvas')[0];
     var canvasContext = canvas && canvas.getContext ? canvas.getContext('2d') : {};
@@ -23,6 +26,13 @@ $(function () {
 
     // 模版
     var playerTemplate = template.render('player');
+
+    // 模版
+    function getPlayerTemplate(index) {
+        return template.render('player', {
+            color: color[index * 10 + '']
+        });
+    }
 
     // 通知
     function notice(type, message) {
@@ -58,7 +68,7 @@ $(function () {
 
     // 增加一位玩家
     $('#add-player').click(function () {
-        $('.container form').append(playerTemplate);
+        $('.container form').append(getPlayerTemplate($('.container form .clearfix').length + 1));
     });
 
     // 去掉一位玩家
@@ -139,7 +149,8 @@ $(function () {
 
             //开始播放
             var i = 0;
-            setInterval(function () { // 每帧
+            clearInterval(handler);
+            handler = setInterval(function () { // 每帧
                 if (i < game.round) {
                     for (var j in game.frames[i]) { // 每增量变化单元格
                         var unit = game.frames[i][j];
@@ -158,7 +169,7 @@ $(function () {
 
 
 // 初始化
-    $('.container form').append(playerTemplate);
+    $('.container form').append(getPlayerTemplate(1));
 
 })
 ;

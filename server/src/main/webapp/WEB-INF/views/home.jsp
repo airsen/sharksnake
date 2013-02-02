@@ -93,6 +93,7 @@
 <script type="text/javascript" src="/resources/js/index.js"></script>
 <script type="text/html" id="player">
     <div class="clearfix">
+        <div class="pull-left color" style="background-color:{{=color }}"></div>
         <input type="hidden" class="type">
         <input type="hidden" class="address">
 
