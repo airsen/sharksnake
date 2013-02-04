@@ -115,7 +115,7 @@ public class HomeController {
 		String[] playerAddresses = ParseUtil.getParameterValues("address");
 		if (playerTypes.length != playerAddresses.length || playerTypes.length <= 0)
 			return null;
-		List<Player> players = new ArrayList<>();
+		List<Player> players = new ArrayList<Player>();
 		for (int i = 0; i < playerAddresses.length; i++) {
 			if (StringUtils.isBlank(playerTypes[i]) || StringUtils.isBlank(playerAddresses[i]))
 				players.add(null);

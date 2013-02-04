@@ -2,12 +2,7 @@ package info.airsen.game;
 
 import info.airsen.common.RandomUtil;
 import lombok.Data;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -21,13 +16,11 @@ import java.util.UUID;
 @Data
 public class GameContext {
 
-	private static final Logger LOGGER = Logger.getLogger(GameContext.class);
-
 	// 方向常量
-	public static final int DIR_UP = 3;
-	public static final int DIR_RIGHT = 4;
-	public static final int DIR_DOWN = 1;
-	public static final int DIR_LEFT = 2;
+	public static final int DIR_UP = 1;
+	public static final int DIR_RIGHT = 2;
+	public static final int DIR_DOWN = 3;
+	public static final int DIR_LEFT = 4;
 
 	// 物体常量
 	public static final int FOOD = 1;
@@ -88,7 +81,7 @@ public class GameContext {
 
 	public List<Coordinate> popIncreMap() {
 		List<Coordinate> result = this.increMap;
-		this.increMap = new ArrayList<>();
+		this.increMap = new ArrayList<Coordinate>();
 		return result;
 	}
 
@@ -119,7 +112,7 @@ public class GameContext {
 		for (int snakeLength : snakeLengths) {
 			snakeLength = 1;
 		}
-		increMap = new ArrayList<>();
+		increMap = new ArrayList<Coordinate>();
 
 		// 初始化食物
 		food = RandomUtil.getRandomCoordinate(width, height);
@@ -156,16 +149,16 @@ public class GameContext {
 		if (++round >= totalRound)
 			return false;
 
-		List<Integer> deathQueue = new ArrayList<>(); // 死亡的队列
-		List<Integer> longerQueue = new ArrayList<>(); // 吃到食物变长的队列
-		List<Integer> normalQueue = new ArrayList<>(); // 正常队列
+		List<Integer> deathQueue = new ArrayList<Integer>(); // 死亡的队列
+		List<Integer> longerQueue = new ArrayList<Integer>(); // 吃到食物变长的队列
+		List<Integer> normalQueue = new ArrayList<Integer>(); // 正常队列
 
 		// 1，擦除所有尾巴
 		moveTail();
 
 		// 2，移动头部
 		// 2.1，记录头部
-		List<Coordinate> fetureSnakeHeadList = new ArrayList<>();
+		List<Coordinate> fetureSnakeHeadList = new ArrayList<Coordinate>();
 		fetureSnakeHeadList.add(null);
 		for (int i = 1; i <= count; i++) {
 			fetureSnakeHeadList.add(getNextHead(i, directions[i]));
@@ -406,38 +399,38 @@ public class GameContext {
 		return builder.toString();
 	}
 
-	public static void main(String[] args) throws IOException {
-		GameContext gameContext = new GameContext();
-		gameContext.setCount(1);
-		gameContext.setTotalRound(100);
-		gameContext.setWidth(6);
-		gameContext.setHeight(6);
-		gameContext.init();
-		LOGGER.info("初始化以后的界面如下：" + "\n" + gameContext + "===================");
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		String input;
-		int dir = 0;
-		boolean cont = true;
-		while (cont && StringUtils.isNotBlank(input = reader.readLine())) {
-			switch (input) {
-				case "w":
-					dir = DIR_UP;
-					break;
-				case "d":
-					dir = DIR_RIGHT;
-					break;
-				case "s":
-					dir = DIR_DOWN;
-					break;
-				case "a":
-					dir = DIR_LEFT;
-					break;
-				default:
-					break;
-			}
-			cont = gameContext.nextRound(new int[]{0, dir});
-			LOGGER.info("界面如下：" + "\n" + gameContext + "===================");
-		}
-	}
+//	public static void main(String[] args) throws IOException {
+//		GameContext gameContext = new GameContext();
+//		gameContext.setCount(1);
+//		gameContext.setTotalRound(100);
+//		gameContext.setWidth(6);
+//		gameContext.setHeight(6);
+//		gameContext.init();
+//		LOGGER.info("初始化以后的界面如下：" + "\n" + gameContext + "===================");
+//		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+//		String input;
+//		int dir = 0;
+//		boolean cont = true;
+//		while (cont && StringUtils.isNotBlank(input = reader.readLine())) {
+//			switch (input) {
+//				case "w":
+//					dir = DIR_UP;
+//					break;
+//				case "d":
+//					dir = DIR_RIGHT;
+//					break;
+//				case "s":
+//					dir = DIR_DOWN;
+//					break;
+//				case "a":
+//					dir = DIR_LEFT;
+//					break;
+//				default:
+//					break;
+//			}
+//			cont = gameContext.nextRound(new int[]{0, dir});
+//			LOGGER.info("界面如下：" + "\n" + gameContext + "===================");
+//		}
+//	}
 
 }

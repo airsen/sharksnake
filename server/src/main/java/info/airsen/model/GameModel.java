@@ -29,7 +29,7 @@ public class GameModel {
 
 	public GameModel(String key) {
 		this.key = key;
-		frames = new ArrayList<>();
+		frames = new ArrayList<List<Coordinate>>();
 		round = 0;
 	}
 
