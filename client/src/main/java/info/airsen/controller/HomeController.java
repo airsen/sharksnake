@@ -43,12 +43,17 @@ public class HomeController {
 		// 直接走过去找食物的方法
 		Coordinate food = context.getFood();
 		Coordinate head = context.getSnakeHeads()[serinum];
+		int currDir = head.getValue() % 10; // 对10求余得到个位数
 		int[][] map = context.getMap();
 
 		System.out.println(context);
 
 		int x = food.getX() - head.getX();
 		int y = food.getY() - head.getY();
+
+//		if (x == 0) // 同个横坐标
+//			if (map[head.getX() + 1][head.getY()] == 1 || map[head.getX() + 1][head.getY()] == 0)
+
 
 		if (x > 0 && map[head.getX() + 1][head.getY()] == 0 || map[head.getX() + 1][head.getY()] == 1)
 			return GameContext.DIR_RIGHT;
