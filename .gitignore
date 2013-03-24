@@ -4,3 +4,6 @@ target
 *logs*
 *.swp
 .DS_Store
+.settings
+.project
+.classpath
