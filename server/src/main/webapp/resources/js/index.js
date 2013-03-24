@@ -186,6 +186,7 @@ $(function () {
 
 // 初始化
     $('.container form').append(getPlayerTemplate(1));
+    $('.container form .clearfix input[type=text]').val("localhost:8081");
 
 })
 ;
