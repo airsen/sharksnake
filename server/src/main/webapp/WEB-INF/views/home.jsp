@@ -74,7 +74,7 @@
 
                 <div class="controls">
                     <input type="text" class="input-xlarge" id="speed"
-                           placeholder="播放游戏的速度，单位毫秒，默认是1000">
+                           placeholder="播放游戏的速度，单位毫秒，默认是400">
                 </div>
             </div>
         </div>

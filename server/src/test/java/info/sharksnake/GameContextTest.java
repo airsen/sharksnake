@@ -1,6 +1,7 @@
-package info.airsen;
+package info.sharksnake;
 
-import info.airsen.game.GameContext;
+import info.airsen.sharksnake.base.game.GameContext;
+
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;

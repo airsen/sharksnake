@@ -1,7 +1,7 @@
-package info.airsen;
+package info.sharksnake;
 
-import info.airsen.driver.Driver;
-import info.airsen.game.GameContext;
+import info.airsen.sharksnake.base.game.GameContext;
+import info.airsen.sharksnake.server.driver.Driver;
 import lombok.Data;
 import org.apache.log4j.Logger;
 

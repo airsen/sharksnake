@@ -14,7 +14,7 @@ $(function () {
     var canvasContext = canvas && canvas.getContext ? canvas.getContext('2d') : {};
     var map = {};
     map.size = 40;
-    map.speed = 1000;
+    map.speed = 400;
     map.playerMaxCount = 5;
     var color = {
         0: '#fff',
