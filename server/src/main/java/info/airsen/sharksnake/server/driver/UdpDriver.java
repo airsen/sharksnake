@@ -15,7 +15,7 @@ public class UdpDriver extends Driver {
 	}
 
 	@Override
-	public int next(GameContext context) {
+	public int next(GameContext context, int serinum) {
 		return 0;
 	}
 }

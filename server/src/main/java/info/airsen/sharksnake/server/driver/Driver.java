@@ -14,13 +14,9 @@ public abstract class Driver {
 
 	protected String address;
 
-	public boolean test() {
-		return false;
-	}
+	public abstract boolean test();
 
-	public int next(GameContext gameContext) {
-		return 0;
-	}
+	public abstract int next(GameContext gameContext, int serinum);
 
 
 }

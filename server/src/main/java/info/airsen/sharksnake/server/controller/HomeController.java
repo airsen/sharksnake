@@ -52,7 +52,7 @@ public class HomeController {
 			gameModel.add(increMap);
 			for (int i = 0; i < gameContext.getCount(); i++) {
 				if (gameContext.getSnakeHeads()[i + 1] != null) { // 已经逝去
-					playerResults[i + 1] = clientList.get(i + 1).next(gameContext);
+					playerResults[i + 1] = clientList.get(i + 1).next(gameContext, i + 1);
 				}
 //				playerResults[i + 1] = clientList.get(i).next(gameContext);
 			}

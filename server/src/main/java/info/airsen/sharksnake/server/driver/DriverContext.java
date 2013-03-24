@@ -56,8 +56,8 @@ public class DriverContext {
 		return driver.test();
 	}
 
-	public int next(GameContext context) {
-		return driver.next(context);
+	public int next(GameContext context, int serinum) {
+		return driver.next(context, serinum);
 	}
 
 }

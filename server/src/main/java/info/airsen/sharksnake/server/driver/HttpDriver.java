@@ -56,10 +56,10 @@ public class HttpDriver extends Driver {
 	}
 
 	@Override
-	public int next(GameContext gameContext) {
+	public int next(GameContext gameContext, int serinum) {
 
 		try {
-			URL url = new URL(address + "/next?gameContext=" + Constant.GSON.toJson(gameContext));
+			URL url = new URL(address + "/next?gameContext=" + Constant.GSON.toJson(gameContext) + "&serinum=" + serinum);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setConnectTimeout(1000);
 			connection.connect();
